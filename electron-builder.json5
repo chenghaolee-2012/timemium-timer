@@ -9,10 +9,22 @@
   },
   "files": [
     "dist",
-    "dist-electron",
-    "font.ttf",
-    "icon.png",
-    "icons/**/*"
+    "dist-electron"
+  ],
+  "extraResources": [
+    {
+      "from": "font.ttf",
+      "to": "font.ttf"
+    },
+    {
+      "from": "icon.png",
+      "to": "icon.png"
+    },
+    {
+      "from": "icons",
+      "to": "icons",
+      "filter": ["**/*"]
+    }
   ],
   "mac": {
     "target": [
@@ -23,30 +35,30 @@
       "x64",
       "arm64"
     ],
-    "artifactName": "${productName}-Mac-${version}-${arch}.${ext}"
+    "artifactName": "${productName}-Mac-${version}-${arch}.${ext}",
+    "category": "public.app-category.utilities"
   },
   "win": {
     "target": [
       {
         "target": "nsis",
-        "arch": [
-          "x64"
-        ]
+        "arch": ["x64"]
       },
       {
         "target": "portable",
-        "arch": [
-          "x64"
-        ]
+        "arch": ["x64"]
       }
     ],
-    "artifactName": "${productName}-Windows-${version}-${arch}-${target}.${ext}"
+    "artifactName": "${productName}-Windows-${version}-${arch}-${target}.${ext}",
+    "icon": "icon.png"
   },
   "nsis": {
     "oneClick": false,
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false
+    "deleteAppDataOnUninstall": false,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true
   },
   "linux": {
     "target": [
@@ -58,6 +70,8 @@
       "x64",
       "arm64"
     ],
-    "artifactName": "${productName}-Linux-${version}-${arch}.${ext}"
+    "artifactName": "${productName}-Linux-${version}-${arch}.${ext}",
+    "category": "Utility",
+    "icon": "icon.png"
   }
 }
