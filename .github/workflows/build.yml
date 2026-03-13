@@ -1,61 +1,73 @@
-name: Build
+name: Build Application
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-
+  build-windows:
+    runs-on: windows-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build Vite
-        run: npm run build
-
-      - name: Build Electron (Windows)
-        if: matrix.os == 'windows-latest'
-        run: npm run electron:build -- --win
+          node-version: '20'
+      
+      - run: npm install
+      
+      - run: npm run build
+      
+      - run: npx electron-builder --win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Electron (macOS)
-        if: matrix.os == 'macos-latest'
-        run: npm run electron:build -- --mac
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install Linux dependencies
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y rpm
-
-      - name: Build Electron (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: npm run electron:build -- --linux
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+      
+      - uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-build
-          path: release/
+          name: windows
+          path: release/*
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - run: npm install
+      
+      - run: npm run build
+      
+      - run: npx electron-builder --mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: release/*
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - run: npm install
+      
+      - run: npm run build
+      
+      - run: npx electron-builder --linux
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: release/*
