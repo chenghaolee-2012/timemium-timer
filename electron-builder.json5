@@ -1,21 +1,29 @@
 // @see - https://www.electron.build/configuration/configuration
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
+  "appId": "com.timemium.app",
   "asar": true,
-  "productName": "YourAppName",
+  "productName": "Timemium",
   "directories": {
     "output": "release/${version}"
   },
   "files": [
     "dist",
-    "dist-electron"
+    "dist-electron",
+    "font.ttf",
+    "icon.png",
+    "icons/**/*"
   ],
   "mac": {
     "target": [
-      "dmg"
+      "dmg",
+      "zip"
     ],
-    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
+    "arch": [
+      "x64",
+      "arm64"
+    ],
+    "artifactName": "${productName}-Mac-${version}-${arch}.${ext}"
   },
   "win": {
     "target": [
@@ -24,9 +32,15 @@
         "arch": [
           "x64"
         ]
+      },
+      {
+        "target": "portable",
+        "arch": [
+          "x64"
+        ]
       }
     ],
-    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+    "artifactName": "${productName}-Windows-${version}-${arch}-${target}.${ext}"
   },
   "nsis": {
     "oneClick": false,
@@ -36,8 +50,14 @@
   },
   "linux": {
     "target": [
-      "AppImage"
+      "AppImage",
+      "deb",
+      "rpm"
     ],
-    "artifactName": "${productName}-Linux-${version}.${ext}"
+    "arch": [
+      "x64",
+      "arm64"
+    ],
+    "artifactName": "${productName}-Linux-${version}-${arch}.${ext}"
   }
 }
