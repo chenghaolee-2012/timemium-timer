@@ -1,4 +1,4 @@
-name: Build Application
+name: Build
 
 on:
   push:
@@ -19,9 +19,7 @@ jobs:
       
       - run: npm run build
       
-      - run: npx electron-builder --win
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm run electron:build -- --win --publish=never
       
       - uses: actions/upload-artifact@v4
         with:
@@ -41,9 +39,7 @@ jobs:
       
       - run: npm run build
       
-      - run: npx electron-builder --mac
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm run electron:build -- --mac --publish=never
       
       - uses: actions/upload-artifact@v4
         with:
@@ -63,9 +59,7 @@ jobs:
       
       - run: npm run build
       
-      - run: npx electron-builder --linux
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm run electron:build -- --linux --publish=never
       
       - uses: actions/upload-artifact@v4
         with:
